@@ -49,7 +49,7 @@ output "secret_access_key" {
 }
 
 resource "local_file" "aws_credentials_vars" {
-  filename = "../../main_configuration/credentials.tfvars" # Update with your desired file path
+  filename = "../../aws/service/credentials.tfvars" # Update with your desired file path
   content  = <<-EOT
     access_key = "${aws_iam_access_key.IAM_access_key.id}"
     secret_key = "${aws_iam_access_key.IAM_access_key.secret}"
