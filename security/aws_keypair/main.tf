@@ -1,5 +1,3 @@
-// security/aws_keypair/main.tf
-
 // Generate a private key locally
 resource "tls_private_key" "key" {
   algorithm = "RSA"

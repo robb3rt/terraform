@@ -1,7 +1,9 @@
+variable "aws_region" {}
+variable "aws_keypair" {}
+variable "instance_role" {}
+
 provider "aws" {
-  region     = "eu-central-1"
-  access_key = var.access_key
-  secret_key = var.secret_key
+  region = var.aws_region
 }
 
 module "keypair" {
@@ -9,7 +11,7 @@ module "keypair" {
 }
 
 resource "aws_iam_role" "elastic_beanstalk_service_role" {
-  name               = "elastic-beanstalk-service-role"
+  name               = var.instance_role
   assume_role_policy = data.aws_iam_policy_document.elastic_beanstalk_service_assume_role.json
 }
 
@@ -51,6 +53,6 @@ resource "aws_iam_role_policy_attachment" "elastic_beanstalk_policy_attachment" 
 
 # Create the AWS Key Pair
 resource "aws_key_pair" "keypair" {
-  key_name   = var.aws_keypair_name      # Specify the name of the key pair
+  key_name   = var.aws_keypair           # Specify the name of the key pair
   public_key = module.keypair.public_key # Specify the path to the public key file
 }

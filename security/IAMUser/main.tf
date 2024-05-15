@@ -1,3 +1,4 @@
+#this file will contain all relevant permissions needed to manage all instances, based on CloudTrail events made from the events
 provider "aws" {
   region = "us-west-2"
 }
@@ -15,13 +16,24 @@ data "aws_iam_policy_document" "IAM_policy" {
     actions = [
       "iam:GetPolicy",
       "iam:GetRole",
+      "iam:GetPolicyVersion",
+      "iam:ListAttachedRolePolicies",
+      "iam:ListInstanceProfilesForRole",
+      "iam:ListPolicyVersions",
+      "iam:ListRolePolicies",
       "iam:CreateRole",
       "iam:CreatePolicy",
       "iam:AttachUserPolicy",
       "iam:AttachRolePolicy",
       "iam:PassRole",
       "ec2:ImportKeyPair",
-      "elasticbeanstalk:*",
+      "ec2:DescribeKeyPairs",
+      "elasticbeanstalk:CreateApplication",
+      "elasticbeanstalk:CreateApplicationVersion",
+      "elasticbeanstalk:CreateEnvironment",
+      "elasticbeanstalk:UpdateApplication",
+      "elasticbeanstalk:UpdateApplicationVersion",
+      "elasticbeanstalk:UpdateEnvironment"
     ]
 
     resources = ["*"] # Allow actions on all resources
@@ -48,14 +60,7 @@ output "secret_access_key" {
   sensitive = true
 }
 
-resource "local_file" "aws_credentials_vars" {
-  filename = "../../aws/service/credentials.tfvars" # Update with your desired file path
-  content  = <<-EOT
-    access_key = "${aws_iam_access_key.IAM_access_key.id}"
-    secret_key = "${aws_iam_access_key.IAM_access_key.secret}"
-  EOT
-}
-
+#File to replace ~/.aws/credentials with
 resource "local_file" "aws_credentials_file" {
   filename = "../../tmp/aws_credentials.txt" # Update with your desired file path
   content  = <<-EOT
